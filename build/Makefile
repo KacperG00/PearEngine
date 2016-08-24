@@ -17,13 +17,8 @@ RENDER_OBJECTS = simple_sprite_renderer.o sprite.o
 RENDER_SRC = $(PTS)Graphics/Render/simple_sprite_renderer.cpp $(PTS)Graphics/Render/sprite.cpp
 
 RESOURCES_OBJECTS = resource_manager.o
-RESOURCES_SRC = $(PTS)Graphics/resource_manager.cpp
-
 INPUT_OBJECTS = input.o
-INPUT_SRC = $(PTS)Input/input.cpp
-
-UTILS_OBJECTS = timer.o
-UTILS_SRC = $(PTS)Utilities/timer.cpp
+UTILS_OBJECTS = timer.o fps_counter.o fatal_error.o
 
 all: $(ALL_OBJECTS)
 	g++ $(ALL_OBJECTS) $(DEBUG) -o executable
@@ -42,14 +37,18 @@ simple_sprite_renderer.o: $(RENDER_SRC)
 sprite.o: $(RENDER_SRC)
 	g++ $(DEBUG) -c $(RENDER_SRC)
 
-resource_manager.o: $(RESOURCES_SRC)
-	g++ $(DEBUG) -c $(RESOURCES_SRC)
+resource_manager.o: $(PTS)Graphics/resource_manager.cpp
+	g++ $(DEBUG) -c $(PTS)Graphics/resource_manager.cpp
 
-input.o: $(INPUT_SRC)
-	g++ $(DEBUG) -c $(INPUT_SRC)
+input.o: $(PTS)Input/input.cpp
+	g++ $(DEBUG) -c $(PTS)Input/input.cpp
 
-timer.o: $(UTILS_SRC)
-	g++ $(DEBUG) -c $(UTILS_SRC)
+timer.o: $(PTS)Utilities/timer.cpp
+	g++ $(DEBUG) -c $(PTS)Utilities/timer.cpp
+fps_counter.o: $(PTS)Utilities/fps_counter.cpp
+	g++ $(DEBUG) -c $(PTS)Utilities/fps_counter.cpp
+fatal_error.o: $(PTS)Utilities/fatal_error.cpp
+	g++ $(DEBUG) -c $(PTS)Utilities/fatal_error.cpp
 
 clean:
 	rm *.o

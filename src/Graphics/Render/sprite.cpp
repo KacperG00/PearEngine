@@ -8,9 +8,14 @@
 
 namespace pear {
 	
+	unsigned int Sprite::_spriteCount = 0;
+	
 	Sprite::Sprite( const glm::vec2& pos, const glm::vec2& dimensions, const glm::vec4& color )
-		: x(pos.x), y(pos.y), w(dimensions.x), h(dimensions.y), m_VBO( 0 ), textureID( 0 )
+		: x(pos.x), y(pos.y), w(dimensions.x), h(dimensions.y), textureID( 0 ),
+		spriteID( _spriteCount + 1 )
 	{
+		_spriteCount++;
+		
 		col.r = (int)color.x;
 		col.g = (int)color.y;
 		col.b = (int)color.z;
@@ -19,17 +24,18 @@ namespace pear {
 	
 	Sprite::Sprite( const glm::vec2& pos, const glm::vec2& dimensions, GLuint tID )
 		: x(pos.x), y(pos.y), w(dimensions.x), h(dimensions.y),
-		m_VBO( 0 ),
-		textureID( tID )
+		textureID( tID ),
+		spriteID( _spriteCount + 1 )
 	{
+		_spriteCount++;
+		
 		col.r = col.b = col.a = 0xFF;
 		col.g = 0x00;
 	}
 	
 	Sprite::~Sprite()
 	{
-		if( m_VBO != 0 )
-			glDeleteBuffers( 1, &m_VBO );
+		_spriteCount--;
 	}
 	
 }

@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "../Utilities/fatal_error.hpp"
+#include "../Utilities/fatal_error.h"
 
 #include <string>
 

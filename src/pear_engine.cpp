@@ -2,11 +2,12 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Utilities/fps_counter.h"
+#include "Utilities/fatal_error.h"
+
 #include <iostream>
 #include <cstdlib>
 #include <SDL2/SDL.h>
-
-#include "Utilities/timer.h"
 
 Pear_MainProgram::Pear_MainProgram()
 	: program_state( ProgramState::STOPPED ),
@@ -39,69 +40,55 @@ void Pear_MainProgram::init()
 		else
 		{
 			pear::Input::init();
-			initShaders();
 			
 			m_SpriteRenderer = new pear::SimpleSpriteRenderer();
 			
-			pear::ResourceManager::addTexture( "void.jpg" );
-			pear::ResourceManager::addTexture( "daredevil.jpg" );
-			pear::ResourceManager::addTexture( "pretty_girl.jpg" );
+			//pear::ResourceManager::addTexture( "void.jpg" );
+			//pear::ResourceManager::addTexture( "daredevil.jpg" );
+			//pear::ResourceManager::addTexture( "pretty_girl.jpg" );
+			pear::ResourceManager::addTexture( "number0.jpg" );
+			pear::ResourceManager::addTexture( "number1.jpg" );
+			pear::ResourceManager::addTexture( "number2.jpg" );
+			pear::ResourceManager::addTexture( "number3.jpg" );
+			pear::ResourceManager::addTexture( "number4.jpg" );
+			pear::ResourceManager::addTexture( "number5.jpg" );
+			pear::ResourceManager::addTexture( "number6.jpg" );
+			pear::ResourceManager::addTexture( "number7.jpg" );
+			pear::ResourceManager::addTexture( "number8.jpg" );
+			pear::ResourceManager::addTexture( "number9.jpg" );
+			pear::ResourceManager::addTexture( "number10.jpg" );
+			pear::ResourceManager::addTexture( "number11.jpg" );
+			pear::ResourceManager::addTexture( "number12.jpg" );
+			pear::ResourceManager::addTexture( "number13.jpg" );
+			pear::ResourceManager::addTexture( "number14.jpg" );
+			pear::ResourceManager::addTexture( "number15.jpg" );
 		}
 	}
 }
 
 void Pear_MainProgram::run()
 {
-	m_SpriteRenderer->submit( new pear::Sprite( glm::vec2( -0.5f, 0.5f ), glm::vec2( 1.0f, 1.0f ), pear::ResourceManager::getTexture( "pretty_girl.jpg" ) ) );
-	//m_SpriteRenderer->submit( new pear::Sprite( glm::vec2( -0.5f, 0.5f ), glm::vec2( 1.0f, 1.0f ), glm::vec4( 0xFF, 0xFF, 0xFF, 0xFF ) ) );
+	m_SpriteRenderer->submit( new pear::Sprite( glm::vec2( -1.0f, 1.0f ), glm::vec2( 2.0f, 2.0f ), glm::vec4( 0x00, 0x00, 0x00, 0xFF ) ) );
+	//m_SpriteRenderer->submit( new pear::Sprite( glm::vec2( -1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), pear::ResourceManager::getTexture( "void.jpg" ) ) );
+	//m_SpriteRenderer->submit( new pear::Sprite( glm::vec2(  0.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), pear::ResourceManager::getTexture( "pretty_girl.jpg" ) ) );
+	//m_SpriteRenderer->submit( new pear::Sprite( glm::vec2(  0.0f, 0.0f ), glm::vec2( 1.0f, 1.0f ), pear::ResourceManager::getTexture( "daredevil.jpg" ) ) );
 	
-	pear::Timer timer;
-	timer.start();
+	for( int i = 0; i < 16; i++ )
+	{
+		m_SpriteRenderer->submit( new pear::Sprite( glm::vec2(  i*(1.0f/8.0f) - 1.0f, i*(1.0f/8.0f) - (1.0f-1.0f/8.0f) ), glm::vec2( 1.0f/8.0f, 1.0f/8.0f ), i+1 ) );
+	}
 	
-	float velocity = 0.02f;
-	glm::mat4 translation;
-	glm::mat4 rotation;
-	glm::mat4 scale;
+	pear::FPSCounter fpsc;
 	
 	program_state = ProgramState::RUNNING;
 	while( program_state == ProgramState::RUNNING )
 	{
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_W ) )
-			translation = glm::translate( translation, glm::vec3( 0.0f, velocity, 0.0f ) );
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_S ) )
-			translation = glm::translate( translation, glm::vec3( 0.0f, -velocity, 0.0f ) );
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_A ) )
-			translation = glm::translate( translation, glm::vec3( -velocity, 0.0f, 0.0f ) );
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_D ) )
-			translation = glm::translate( translation, glm::vec3( velocity, 0.0f, 0.0f ) );
-		
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_Z ) )
-			scale = glm::scale( scale, glm::vec3( 1.05f, 1.05f, 1.0f ) );
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_X ) )
-			scale = glm::scale( scale, glm::vec3( 0.95f, 0.95f, 1.0f ) );
-		
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_Q ) )
-			rotation = glm::rotate( rotation, 0.02f, glm::vec3( 0.0f, 0.0f, 1.0f ) );
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_E ) )
-			rotation = glm::rotate( rotation, -0.02f, glm::vec3( 0.0f, 0.0f, 1.0f ) );
-			
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_K ) )
-			timer.pause();
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_L ) )
-			timer.start();
-		if( pear::Input::isKeyPressed( SDL_SCANCODE_J ) )
-			timer.stop();
-		
-		trans = translation * scale * rotation;
-		
-		printf( "%f\n", timer.getTime() );
+		//printf( "%f\n", fpsc.fps );
+		fpsc.countfps();
 		
 		m_Window->clearScreen();
 		
-		m_DefaultShader.use();
-		m_DefaultShader.setUniformMat4( "transform", trans );
 		m_SpriteRenderer->flush();
-		m_DefaultShader.unuse();
 		
 		m_Window->swap();
 		
@@ -135,15 +122,4 @@ void Pear_MainProgram::eventHandling()
 		
 		Input::buttonsEventHandling();
 	}
-}
-
-void Pear_MainProgram::initShaders()
-{
-	//m_DefaultShader.compileShaders( "standard_shader" );
-	m_DefaultShader.compileShaders( "test_shader" );
-	m_DefaultShader.addAttribute( "ourPosition" );
-	m_DefaultShader.addAttribute( "ourColor" );
-	//m_DefaultShader.addAttribute( "texCoords" );
-	//m_DefaultShader.addAttribute( "textureID" );
-	m_DefaultShader.linkShaders();
 }

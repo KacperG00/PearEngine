@@ -8,6 +8,8 @@ namespace pear {
 	
 	struct Vertex
 	{
+		float tid;
+		
 		struct Position
 		{
 			float x;
@@ -21,8 +23,6 @@ namespace pear {
 			float t;
 		} uv;
 		
-		float tid;
-		
 		struct Color
 		{
 			unsigned char r;
@@ -31,7 +31,7 @@ namespace pear {
 			unsigned char a;
 		} color;
 		
-		
+		// Helpful methods
 		void setPosition( float X, float Y, float Z )
 		{
 			this->position.x = X;
@@ -54,15 +54,13 @@ namespace pear {
 	
 	class Sprite
 	{
-		unsigned int m_SpriteID;
+		static unsigned int _spriteCount;
 		
 	public:
+		unsigned int spriteID;
 		float x, y, w, h;
 		Vertex::Color col;
 		GLuint textureID;
-		
-	private:
-		GLuint m_VBO;
 		
 	public:
 		Sprite( const glm::vec2& pos, const glm::vec2& dimensions, const glm::vec4& color );
