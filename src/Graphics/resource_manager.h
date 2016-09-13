@@ -7,6 +7,8 @@
 
 namespace pear {
 	
+	enum class FileExtention { NONE, PNG, JPEG, BMP };
+	
 	class ResourceManager
 	{
 		static std::map <std::string, GLuint> m_Textures;
@@ -21,6 +23,7 @@ namespace pear {
 		
 	private:
 		static GLuint loadTexture( const char* filename );
+		static FileExtention getFileExtention( const char* filename );
 	};
 	
 }

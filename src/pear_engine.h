@@ -6,7 +6,7 @@
 
 #include "Graphics/resource_manager.h"
 
-#include "Graphics/Render/simple_sprite_renderer.h"
+#include "Graphics/Render/static_sprite_renderer.h"
 
 #include <string>
 
@@ -17,7 +17,7 @@ class Pear_MainProgram
 	enum class ProgramState { RUNNING, STOPPED } program_state;
 	pear::Window *m_Window;
 	
-	pear::SimpleSpriteRenderer* m_SpriteRenderer;
+	pear::StaticSpriteRenderer* m_SpriteRenderer;
 	
 public:
 	Pear_MainProgram();
@@ -28,6 +28,7 @@ public:
 
 private:
 	void eventHandling();
+	void initGL();
 };
 
 #endif // PEAR_ENGINE_H

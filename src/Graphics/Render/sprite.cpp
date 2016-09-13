@@ -10,9 +10,10 @@ namespace pear {
 	
 	unsigned int Sprite::_spriteCount = 0;
 	
-	Sprite::Sprite( const glm::vec2& pos, const glm::vec2& dimensions, const glm::vec4& color )
-		: x(pos.x), y(pos.y), w(dimensions.x), h(dimensions.y), textureID( 0 ),
-		spriteID( _spriteCount + 1 )
+	Sprite::Sprite( const glm::vec4& position_dimensions, const glm::vec4& color, float depth )
+		: x(position_dimensions.x), y(position_dimensions.y), z( depth ), w(position_dimensions.z), h(position_dimensions.w), textureID( 0 ),
+		spriteID( _spriteCount + 1 ),
+		sorted( false )
 	{
 		_spriteCount++;
 		
@@ -22,10 +23,11 @@ namespace pear {
 		col.a = (int)color.w;
 	}
 	
-	Sprite::Sprite( const glm::vec2& pos, const glm::vec2& dimensions, GLuint tID )
-		: x(pos.x), y(pos.y), w(dimensions.x), h(dimensions.y),
+	Sprite::Sprite( const glm::vec4& position_dimensions, GLuint tID, float depth )
+		: x(position_dimensions.x), y(position_dimensions.y), z( depth ), w(position_dimensions.z), h(position_dimensions.w),
 		textureID( tID ),
-		spriteID( _spriteCount + 1 )
+		spriteID( _spriteCount + 1 ),
+		sorted( false )
 	{
 		_spriteCount++;
 		

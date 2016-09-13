@@ -27,8 +27,9 @@ namespace pear {
 	GLuint ResourceManager::loadTexture( const char* filename )
 	{
 		GLuint textureID = 0;
+		SDL_Surface* image = nullptr;
 		
-		SDL_Surface* image = IMG_Load( std::string( std::string("../src/Graphics/Render/Textures/") + filename ).c_str() );
+		image = IMG_Load( std::string( std::string("../src/Graphics/Render/Textures/") + filename ).c_str() );
 		if( image == NULL )
 			std::cout << "Failed to load image " << filename << std::endl;
 		else
@@ -44,7 +45,19 @@ namespace pear {
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 			
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+			unsigned int imageFormat = 0;
+			FileExtention extention = getFileExtention( filename );
+			switch( extention )
+			{
+				case FileExtention::PNG:
+					imageFormat = GL_RGBA;
+					break;
+				default:
+					imageFormat = GL_RGB;
+					break;
+			}
+			
+			glTexImage2D( GL_TEXTURE_2D, 0, imageFormat, image->w, image->h, 0, imageFormat, GL_UNSIGNED_BYTE, image->pixels );
 			glGenerateMipmap( GL_TEXTURE_2D );
 			
 			glBindTexture( GL_TEXTURE_2D, 0 );
@@ -54,6 +67,35 @@ namespace pear {
 		}
 		
 		return textureID;
+	}
+	
+	FileExtention ResourceManager::getFileExtention( const char* filename )
+	{
+		FileExtention extention = FileExtention::NONE;
+		std::string wholeName = filename;
+		std::string extentionString = "";
+		
+		for( int i = wholeName.size() - 1; i >= 0; i-- )
+		{
+			if( wholeName[i] == '.' )
+			{
+				for( int j = i+1; j < wholeName.size(); j++ )
+					extentionString += wholeName[j];
+				
+				break;
+			}
+		}
+		
+		if( extentionString == "jpg" || extentionString == "jpeg" )
+			extention = FileExtention::JPEG;
+		else if( extentionString == "png" )
+			extention = FileExtention::PNG;
+		else if( extentionString == "bmp" )
+			extention = FileExtention::BMP;
+		else
+			extention = FileExtention::NONE;
+		
+		return extention;
 	}
 	
 }

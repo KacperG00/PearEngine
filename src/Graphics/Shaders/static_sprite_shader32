@@ -1,0 +1,93 @@
+#vertex_shader
+#version 130
+
+in vec3 vsPosition;
+in vec4 vsColor;
+in float vsTextureID;
+in vec2 vsTextureCoords;
+
+out vec4 fsColor;
+out float fsTextureID;
+out vec2 fsTextureCoords;
+
+void main()
+{
+	gl_Position = vec4( vsPosition, 1.0f );
+	
+	fsColor = vsColor;
+	fsTextureID = vsTextureID;
+	fsTextureCoords = vsTextureCoords;
+}
+
+#fragment_shader
+#version 130
+
+in vec4 fsColor;
+in float fsTextureID;
+in vec2 fsTextureCoords;
+
+out vec4 outColor;
+
+uniform sampler2D textures[32];
+uniform uint arr_TextureID[32];
+
+void main()
+{
+	vec4 color;
+	
+	if( fsTextureID > 0.0f )
+	{
+		uint tid = uint(fsTextureID);
+		int textureSlot = 0;
+		int i = 0;
+		
+		while( textureSlot == 0 && i < 32 )
+		{
+			if( tid == arr_TextureID[i] )
+				textureSlot = i + 1;
+			i += 1;
+		}
+
+		switch( textureSlot )
+		{
+			case 1:  color = texture(textures[0],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 2:  color = texture(textures[1],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 3:  color = texture(textures[2],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 4:  color = texture(textures[3],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 5:  color = texture(textures[4],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 6:  color = texture(textures[5],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 7:  color = texture(textures[6],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 8:  color = texture(textures[7],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 9:  color = texture(textures[8],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 10: color = texture(textures[9],  vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 11: color = texture(textures[10], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 12: color = texture(textures[11], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 13: color = texture(textures[12], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 14: color = texture(textures[13], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 15: color = texture(textures[14], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 16: color = texture(textures[15], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 17: color = texture(textures[16], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 18: color = texture(textures[17], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 19: color = texture(textures[18], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 20: color = texture(textures[19], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 21: color = texture(textures[20], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 22: color = texture(textures[21], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 23: color = texture(textures[22], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 24: color = texture(textures[23], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 25: color = texture(textures[24], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 26: color = texture(textures[25], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 27: color = texture(textures[26], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 28: color = texture(textures[27], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 29: color = texture(textures[28], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 30: color = texture(textures[29], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 31: color = texture(textures[30], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+			case 32: color = texture(textures[31], vec2(fsTextureCoords.x, 1.0f - fsTextureCoords.y)); break;
+		}
+	}
+	else
+	{
+		color = fsColor;
+	}
+	
+	outColor = color;
+}

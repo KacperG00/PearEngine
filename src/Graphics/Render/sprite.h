@@ -31,7 +31,7 @@ namespace pear {
 			unsigned char a;
 		} color;
 		
-		// Helpful methods
+		
 		void setPosition( float X, float Y, float Z )
 		{
 			this->position.x = X;
@@ -58,13 +58,15 @@ namespace pear {
 		
 	public:
 		unsigned int spriteID;
-		float x, y, w, h;
+		float x, y, z, w, h;
 		Vertex::Color col;
 		GLuint textureID;
 		
+		bool sorted;
+		
 	public:
-		Sprite( const glm::vec2& pos, const glm::vec2& dimensions, const glm::vec4& color );
-		Sprite( const glm::vec2& pos, const glm::vec2& dimensions, GLuint tID );
+		Sprite( const glm::vec4& position_dimensions, const glm::vec4& color, float depth = 0.0f );
+		Sprite( const glm::vec4& position_dimensions, GLuint tID, float depth = 0.0f );
 		~Sprite();
 	};
 	
