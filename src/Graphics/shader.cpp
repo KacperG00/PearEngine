@@ -1,12 +1,16 @@
-#include <iostream>
-#include <fstream>
 #include "shader.h"
 
-namespace pear {
+#include "../string_constants.h"
+
+#include <iostream>
+#include <fstream>
+
+namespace pear { namespace graphics {
+	
+	unsigned int Shader::numAttributes = 0;
 	
 	Shader::Shader()
-		: m_Program( 0 ),
-		m_NumAttributes( 0 )
+		: m_Program( 0 )
 	{
 	}
 
@@ -20,7 +24,7 @@ namespace pear {
 	{
 		glUseProgram( m_Program );
 		
-		for( int i = 0; i < m_NumAttributes; i++ )
+		for( int i = 0; i < numAttributes; i++ )
 		{
 			glEnableVertexAttribArray( i );
 		}
@@ -29,7 +33,7 @@ namespace pear {
 	{
 		glUseProgram( 0 );
 		
-		for( int i = 0; i < m_NumAttributes; i++ )
+		for( int i = 0; i < numAttributes; i++ )
 		{
 			glDisableVertexAttribArray( i );
 		}
@@ -37,7 +41,7 @@ namespace pear {
 	
 	void Shader::addAttribute( const char* attributeName )
 	{
-		glBindAttribLocation( m_Program, m_NumAttributes++, attributeName );
+		glBindAttribLocation( m_Program, numAttributes++, attributeName );
 	}
 	
 	GLint Shader::getUniformLocation( const char* uniformName )
@@ -70,6 +74,11 @@ namespace pear {
 		glUniform1i( getUniformLocation( name ), value );
 	}
 	
+	void Shader::setUniform1ui( const char* name, unsigned int value )
+	{
+		glUniform1ui( getUniformLocation( name ), value );
+	}
+	
 	void Shader::setUniformMat4( const char* name, const glm::mat4& matrix )
 	{
 		glUniformMatrix4fv( getUniformLocation( name ), 1, GL_FALSE, &matrix[0][0] );
@@ -82,7 +91,7 @@ namespace pear {
 		m_VertexShaderID = glCreateShader( GL_VERTEX_SHADER );
 		m_FragmentShaderID = glCreateShader( GL_FRAGMENT_SHADER );
 		
-		std::string path = std::string( "../src/Graphics/Shaders/" ) + sourcePath;
+		std::string path = paths_from_build::SHADERS + sourcePath;
 		std::ifstream file( path.c_str() );
 		if( file.fail() )
 		{
@@ -141,7 +150,7 @@ namespace pear {
 			if(!success)
 			{
 				glGetShaderInfoLog( m_VertexShaderID, 512, NULL, infoLog );
-				std::cout << "ERROR::SHADER::COMPILATION_FAILED\n"<< sourcePath << infoLog << std::endl;
+				std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << sourcePath << infoLog << std::endl;
 			}
 			
 			contentsPtr = fragmentSource.c_str();
@@ -152,7 +161,7 @@ namespace pear {
 			if(!success)
 			{
 				glGetShaderInfoLog( m_FragmentShaderID, 512, NULL, infoLog );
-				std::cout << "ERROR::SHADER::COMPILATION_FAILED\n"<< sourcePath << infoLog << std::endl;
+				std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << sourcePath << infoLog << std::endl;
 			}
 		}
 		file.close();
@@ -225,4 +234,4 @@ namespace pear {
 		file.close();
 	}
 	
-}
+} }

@@ -9,15 +9,17 @@ namespace pear {
 	Window::Window( const char* title, int width, int height )
 		: m_Title( title ), m_Width( width ), m_Height( height ), m_Window( nullptr ), m_Context( 0 )
 	{
+		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+		
 		m_Window = SDL_CreateWindow( m_Title, 100, 100, m_Width, m_Height,
 									SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
 		if( m_Window == NULL )
-			fatalError( std::string(std::string( "Failed to create window (" ) + m_Title + ")" ).c_str() );
+			utils::fatalError( std::string(std::string( "Failed to create window (" ) + m_Title + ")" ).c_str() );
 		else
 		{
 			m_Context = SDL_GL_CreateContext( m_Window );
 			if( m_Context = 0 )
-				fatalError( std::string(std::string( "Failed to create context for window (" ) + m_Title + ")" ).c_str() );
+				utils::fatalError( std::string(std::string( "Failed to create context for window (" ) + m_Title + ")" ).c_str() );
 			else
 			{
 				glClearColor( 0.1f, 0.1f, 0.1f, 1.0f );

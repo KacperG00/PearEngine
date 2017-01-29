@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-namespace pear {
+namespace pear { namespace utils {
 	
 	void fatalError( const char* message )
 	{
@@ -16,4 +16,4 @@ namespace pear {
 		exit( 69 );
 	}
 	
-}
+} }

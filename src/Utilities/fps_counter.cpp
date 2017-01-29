@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-namespace pear {
+namespace pear { namespace utils {
 	
 	FPSCounter::FPSCounter()
 		: m_StepCounter( 0 ),
@@ -56,4 +56,4 @@ namespace pear {
 		SDL_Delay( delay );
 	}
 	
-}
+} }

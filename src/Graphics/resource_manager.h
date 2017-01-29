@@ -1,31 +1,50 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
+#include <SDL2/SDL.h>
 #include <GL/glew.h>
 
 #include <map>
+#include <vector>
 
-namespace pear {
-	
-	enum class FileExtention { NONE, PNG, JPEG, BMP };
+#include "Render2D/sprite.h"
+
+namespace pear { namespace graphics {
 	
 	class ResourceManager
 	{
-		static std::map <std::string, GLuint> m_Textures;
-		static GLuint m_TextureCount;
+		static std::map <unsigned int, Sprite*> m_Sprites;
+		static unsigned int m_SpriteCount;
+		
+		static std::map <std::string, Texture*> m_Textures;
+		static unsigned int m_TextureCount;
+		
+		static std::map <std::string, Font*> m_Fonts;
+		static unsigned int m_FontCount;
 		
 	public:
 		static void cleanManager();
-		static void addTexture( const char* filename );
 		
-		inline static const GLuint& getTexture( const char* texture_name ) { return m_Textures[texture_name]; }
+		static void addTexture( const char* filename );
+		static void addFont( const char* filename );
+		static void addSprite( Sprite* );
+		
+		static Texture* getTexture( const char* texture_name );
+		static Sprite* getSprite( unsigned int element );
+		
 		inline static GLuint getTextureCount() { return m_TextureCount; }
+		inline static GLuint getSpriteCount() { return m_SpriteCount; }
 		
 	private:
-		static GLuint loadTexture( const char* filename );
-		static FileExtention getFileExtention( const char* filename );
+		static Texture* loadTexture( const char* filename );
+		static Font* loadFont( const char* filename );
+		
+		static void cleanTextureMap();
+		static void cleanFontMap();
+		
+		static Texture* from_SDL_Surface_to_Texture( SDL_Surface* surface, unsigned int image_format );
 	};
 	
-}
+} }
 
 #endif // RESOURCE_MANAGER_H

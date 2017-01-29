@@ -1,0 +1,52 @@
+#vertex_shader
+#version 130
+
+in vec3 vsPosition;
+in vec4 vsColor;
+in float vsTID;
+in vec2 vsUV;
+
+out vec4 fsColor;
+out float fsTID;
+out vec2 fsUV;
+
+uniform mat4 transMat;
+
+void main()
+{
+	gl_Position = transMat * vec4( vsPosition, 1.0f );
+	
+	fsColor = vsColor;
+	fsTID = vsTID;
+	fsUV = vsUV;
+}
+
+#fragment_shader
+#version 130
+
+in vec4 fsColor;
+in float fsTID;
+in vec2 fsUV;
+
+out vec4 outColor;
+
+uniform sampler2D diffuse_texture;
+uniform vec4 texCoordsModifier;
+
+void main()
+{
+	vec4 color = vec4( 1.0f, 1.0f, 1.0f, 1.0f );
+	if( fsTID == 0.0f )
+	{
+		color = fsColor;
+	}
+	else
+	{
+		color = texture( diffuse_texture,
+			vec2(fsUV.x, 1.0f - fsUV.y)
+			* vec2(texCoordsModifier.z, texCoordsModifier.w)
+			+ vec2(texCoordsModifier.x, texCoordsModifier.y) );
+	}
+	
+	outColor = color;
+}

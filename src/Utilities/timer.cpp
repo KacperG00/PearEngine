@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-namespace pear {
+namespace pear { namespace utils {
 	
 	Timer::Timer()
 		: started( false ), stopped( true ), paused( false ),
@@ -76,4 +76,4 @@ namespace pear {
 		return ((double)SDL_GetTicks() / 1000.0f);
 	}
 	
-}
+} }

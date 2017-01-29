@@ -6,29 +6,27 @@
 
 #include "Graphics/resource_manager.h"
 
-#include "Graphics/Render/static_sprite_renderer.h"
+#include "Graphics/Render2D/static_sprite_renderer.h"
+#include "Graphics/Render2D/sprite_renderer.h"
 
 #include <string>
 
-const std::string program_version = "0.1";
-
-class Pear_MainProgram
+class pear_engine
 {
-	enum class ProgramState { RUNNING, STOPPED } program_state;
-	pear::Window *m_Window;
+	static enum class ProgramState { RUNNING, STOPPED } program_state;
+	static pear::Window *m_Window;
 	
-	pear::StaticSpriteRenderer* m_SpriteRenderer;
+	static pear::graphics::StaticSpriteRenderer* m_StaticSpriteRenderer;
+	static pear::graphics::SpriteRenderer* m_SpriteRenderer;
 	
 public:
-	Pear_MainProgram();
-	~Pear_MainProgram();
-	
-	void init();
-	void run();
+	static void init();
+	static void quit();
+	static void run();
 
 private:
-	void eventHandling();
-	void initGL();
+	static void eventHandling();
+	static void initGL();
 };
 
 #endif // PEAR_ENGINE_H

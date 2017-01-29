@@ -1,7 +1,7 @@
-#ifndef PEAR_TIMER_H
-#define PEAR_TIMER_H
+#ifndef PEAR_UTILITIES_TIMER_H
+#define PEAR_UTILITIES_TIMER_H
 
-namespace pear {
+namespace pear { namespace utils {
 	
 	class Timer
 	{
@@ -26,6 +26,6 @@ namespace pear {
 		double getSeconds();
 	};
 	
-}
+} }
 
-#endif // PEAR_TIMER_H
+#endif // PEAR_UTILITIES_TIMER_H

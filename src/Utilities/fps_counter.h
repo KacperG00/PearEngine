@@ -1,9 +1,9 @@
-#ifndef PEAR_FPS_COUNTER_H
-#define PEAR_FPS_COUNTER_H
+#ifndef PEAR_UTILITIES_FPS_COUNTER_H
+#define PEAR_UTILITIES_FPS_COUNTER_H
 
 #include "timer.h"
 
-namespace pear {
+namespace pear { namespace utils {
 	
 	class FPSCounter
 	{
@@ -18,9 +18,9 @@ namespace pear {
 		FPSCounter();
 		~FPSCounter();
 		void countfps();
-		void limitfps( unsigned int fps_limit ); // Needs more attention...
+		void limitfps( unsigned int fps_limit ); // Achtung!
 	};
 	
-}
+} }
 
-#endif // PEAR_FPS_COUNTER_H
+#endif // PEAR_UTILITIES_FPS_COUNTER_H

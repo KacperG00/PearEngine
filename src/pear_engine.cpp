@@ -7,80 +7,133 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <iostream>
 #include <cstdlib>
 
-Pear_MainProgram::Pear_MainProgram()
-	: program_state( ProgramState::STOPPED ),
-	m_Window( nullptr ),
-	m_SpriteRenderer( nullptr )
+using namespace pear;
+	
+pear_engine::ProgramState pear_engine::program_state = ProgramState::STOPPED;
+Window* pear_engine::m_Window = nullptr;
+
+graphics::StaticSpriteRenderer* pear_engine::m_StaticSpriteRenderer = nullptr;
+graphics::SpriteRenderer* pear_engine::m_SpriteRenderer = nullptr;
+
+void pear_engine::init()
 {
+	// SDL initialization
+	if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 )
+		utils::fatalError( "Failed to initialize SDL!" );
+	
+	// SDL_image and SDL_ttf
+	int imgFlags = IMG_INIT_PNG;
+	if( !( IMG_Init( imgFlags ) & imgFlags ) )
+		utils::fatalError( "Failed to initialize SDL_images!" );
+	if( TTF_Init() < 0 )
+		utils::fatalError( "Failed to initialize SDL_ttf!" );
+	
+	m_Window = new Window( "PearEngine", 640, 400 );
+	
+	// OpenGL initialization
+	initGL();
+	
+	Input::init();
+	
+	m_StaticSpriteRenderer = new graphics::StaticSpriteRenderer();
+	m_SpriteRenderer = new graphics::SpriteRenderer();
+	
+	graphics::ResourceManager::addTexture( "void.jpg" );
+	graphics::ResourceManager::addTexture( "pretty_girl.jpg" );
+	graphics::ResourceManager::addTexture( "daredevil.jpg" );
+	graphics::ResourceManager::addTexture( "scratches.png" );
+	graphics::ResourceManager::addTexture( "sold_out.png" );
+	graphics::ResourceManager::addTexture( "SpriteSheets/minotaur.png" );
+	
+	graphics::ResourceManager::addFont("GloriaHallelujah.ttf");
 }
 
-Pear_MainProgram::~Pear_MainProgram()
+void pear_engine::quit()
 {
 	if( m_Window != nullptr )
 		delete m_Window;
+	if( m_StaticSpriteRenderer != nullptr )
+		delete m_StaticSpriteRenderer;
 	if( m_SpriteRenderer != nullptr )
 		delete m_SpriteRenderer;
 	
-	pear::ResourceManager::cleanManager();
-}
-
-void Pear_MainProgram::init()
-{
-	if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 )
-		pear::fatalError( "Failed to initialize SDL!" );
-	else
-	{
-		int imgFlags = IMG_INIT_PNG;
-		if( !( IMG_Init( imgFlags ) & imgFlags ) )
-			pear::fatalError( "Failed to initialize SDL_images!" );
-		
-		m_Window = new pear::Window( std::string(std::string("PearEngine | Version: ") + program_version).c_str(), 640, 400 );
-		
-		initGL();
-		
-		pear::Input::init();
-		
-		m_SpriteRenderer = new pear::StaticSpriteRenderer();
-		
-		pear::ResourceManager::addTexture( "void.jpg" );
-		pear::ResourceManager::addTexture( "pretty_girl.jpg" );
-		pear::ResourceManager::addTexture( "daredevil.jpg" );
-		pear::ResourceManager::addTexture( "scratches.png" );
-		pear::ResourceManager::addTexture( "sold_out.png" );
-	}
-}
-
-void Pear_MainProgram::run()
-{
-	m_SpriteRenderer->submit( new pear::Sprite( glm::vec4( -0.9f,  0.9f, 1.8f, 1.8f ), pear::ResourceManager::getTexture( "void.jpg" ) ) );
-	m_SpriteRenderer->submit( new pear::Sprite( glm::vec4(  0.1f, -0.1f, 0.8f, 0.8f ), pear::ResourceManager::getTexture( "pretty_girl.jpg" ) ) );
-	m_SpriteRenderer->submit( new pear::Sprite( glm::vec4( -0.9f,  0.9f, 0.8f, 0.8f ), pear::ResourceManager::getTexture( "daredevil.jpg" ), -0.3f ) );
-	m_SpriteRenderer->submit( new pear::Sprite( glm::vec4(  0.0f,  1.0f, 0.8f, 0.8f ), pear::ResourceManager::getTexture( "sold_out.png" ) ) );
-	m_SpriteRenderer->submit( new pear::Sprite( glm::vec4(  0.0f,  1.0f, 0.8f, 0.8f ), pear::ResourceManager::getTexture( "scratches.png" ) ) );
+	graphics::ResourceManager::cleanManager();
 	
-	pear::FPSCounter fpsc;
+	TTF_Quit();
+	SDL_Quit();
+}
+
+void pear_engine::run()
+{
+	using namespace graphics;
+	
+	m_StaticSpriteRenderer->submit( new Sprite( glm::vec4( -1.0f,  1.0f, 2.0f, 2.0f ), glm::vec4( 0x23, 0xa2, 0x52, 0xFF ) ) );
+	
+	m_StaticSpriteRenderer->submit( new Sprite( glm::vec4( -0.9f,  0.9f, 1.8f, 1.8f ), "void.jpg" ) );
+	m_StaticSpriteRenderer->submit( new Sprite( glm::vec4(  0.1f, -0.1f, 0.8f, 0.8f ), "pretty_girl.jpg" ) );
+	m_StaticSpriteRenderer->submit( new Sprite( glm::vec4( -0.9f,  0.9f, 0.8f, 0.8f ), "daredevil.jpg", -0.3f ) );
+	m_StaticSpriteRenderer->submit( new Sprite( glm::vec4(  0.0f,  1.0f, 0.8f, 0.8f ), "sold_out.png" ) );
+	m_StaticSpriteRenderer->submit( new Sprite( glm::vec4(  0.0f,  1.0f, 0.8f, 0.8f ), "scratches.png" ) );
+	
+	m_SpriteRenderer->submit( new SpriteSheet( glm::vec4( -1.0f, 0.0f, 0.4f, 0.7f ), "SpriteSheets/minotaur.png", -0.5f ) );
+	m_SpriteRenderer->submit( new SpriteSheet( glm::vec4( -1.0f, 0.0f, 0.4f, 0.7f ), "SpriteSheets/minotaur.png", -0.5f ) );
+	m_SpriteRenderer->submit( new Sprite( glm::vec4( -1.0f,-0.25f, 0.5f, 0.5f ), "scratches.png", -0.5f ) );
+	m_SpriteRenderer->submit( new Sprite( glm::vec4(  0.0f, 0.0f, 0.5f, 0.5f ), "GloriaHallelujah.ttf", -0.5f ) );
+	
+	utils::FPSCounter fpsc;
 	
 	program_state = ProgramState::RUNNING;
 	while( program_state == ProgramState::RUNNING )
 	{
 		//printf( "%f\n", fpsc.fps );
 		fpsc.countfps();
+		fpsc.limitfps(60);
 		
 		m_Window->clearScreen();
+		m_StaticSpriteRenderer->flush();
 		m_SpriteRenderer->flush();
 		m_Window->swap();
 		
 		eventHandling();
+		
+		SpriteRenderer::WAIT++;
 	}
 }
 
-void Pear_MainProgram::eventHandling()
+void pear_engine::eventHandling()
 {
-	using namespace pear;
+	using namespace graphics;
+	
+	unsigned int num = 0;
+	
+	if( Input::isKeyPressed( SDL_SCANCODE_1 ) )
+		num = 1;
+	if( Input::isKeyPressed( SDL_SCANCODE_2 ) )
+		num = 2;
+	if( Input::isKeyPressed( SDL_SCANCODE_3 ) )
+		num = 3;
+	
+	if( Input::isKeyPressed( SDL_SCANCODE_W ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 0.0f, 0.008f, 0.0f ), PEAR_TRANSFORM_TRANSLATE );
+	if( Input::isKeyPressed( SDL_SCANCODE_S ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 0.0f,-0.008f, 0.0f ), PEAR_TRANSFORM_TRANSLATE );
+	if( Input::isKeyPressed( SDL_SCANCODE_A ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3(-0.008f, 0.0f, 0.0f ), PEAR_TRANSFORM_TRANSLATE );
+	if( Input::isKeyPressed( SDL_SCANCODE_D ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 0.008f, 0.0f, 0.0f ), PEAR_TRANSFORM_TRANSLATE );
+	if( Input::isKeyPressed( SDL_SCANCODE_Q ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 0.0f, 0.0f,-0.008f ), PEAR_TRANSFORM_ROTATE );
+	if( Input::isKeyPressed( SDL_SCANCODE_E ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 0.0f, 0.0f, 0.008f ), PEAR_TRANSFORM_ROTATE );
+	if( Input::isKeyPressed( SDL_SCANCODE_Z ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 1.001f, 1.001f, 1.001f ), PEAR_TRANSFORM_SCALE );
+	if( Input::isKeyPressed( SDL_SCANCODE_X ) )
+		m_SpriteRenderer->transformMatrix( num, glm::vec3( 0.999f, 0.999f, 0.999f ), PEAR_TRANSFORM_SCALE );
 	
 	while( SDL_PollEvent( &Input::evnt ) != 0 )
 	{
@@ -106,11 +159,11 @@ void Pear_MainProgram::eventHandling()
 	}
 }
 
-void Pear_MainProgram::initGL()
+void pear_engine::initGL()
 {
 	GLenum error = glewInit();
 	if( error != GLEW_OK )
-		pear::fatalError( "Failed to initialize GLEW" );
+		utils::fatalError( "Failed to initialize GLEW" );
 	else
 	{
 		glEnable(GL_DEPTH_TEST);

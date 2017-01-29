@@ -1,12 +1,12 @@
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef PEAR_SHADER_H
+#define PEAR_SHADER_H
 
 #include <glm/glm.hpp>
 
 #include <string>
 #include <GL/glew.h>
 
-namespace pear {
+namespace pear { namespace graphics {
 	
 	const int VERTEX_SHADER = 1;
 	const int FRAGMENT_SHADER = 2;
@@ -17,7 +17,11 @@ namespace pear {
 		GLuint m_VertexShaderID;
 		GLuint m_FragmentShaderID;
 		
-		unsigned int m_NumAttributes;
+	public:
+		static unsigned int numAttributes;
+		
+	private:
+		void compileShader( GLuint shader, const std::string filePath );
 		
 	public:
 		Shader();
@@ -38,14 +42,12 @@ namespace pear {
 		void setUniform3f( const char* name, glm::vec3 vector );
 		void setUniform4f( const char* name, glm::vec4 vector );
 		void setUniform1i( const char* name, int value );
+		void setUniform1ui( const char* name, unsigned int value );
 		void setUniformMat4( const char* name, const glm::mat4& matrix );
 		
 		inline GLuint GetProgram() { return m_Program; }
-		
-	private:
-		void compileShader( GLuint shader, const std::string filePath );
 	};
 
-}
+} }
 
-#endif
+#endif // PEAR_SHADER_H

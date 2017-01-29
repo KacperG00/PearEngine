@@ -2,11 +2,9 @@
 
 int main( int argv, const char* args[] )
 {
-	Pear_MainProgram mainProgram;
+	pear_engine::init();
+	pear_engine::run();
+	pear_engine::quit();
 	
-	mainProgram.init();
-	mainProgram.run();
-	
-	SDL_Quit();
 	return 0;
 }
