@@ -1,6 +1,6 @@
 #include "animation.h"
 
-#include "../resource_manager.h"
+#include "../../resource_manager.h"
 
 #include "../../string_constants.h"
 #include "../../Utilities/string_manipulations.h"

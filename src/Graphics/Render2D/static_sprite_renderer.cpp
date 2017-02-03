@@ -1,6 +1,6 @@
 #include "static_sprite_renderer.h"
 
-#include "../resource_manager.h"
+#include "../../resource_manager.h"
 
 namespace pear { namespace graphics {
 	

@@ -1,8 +1,9 @@
 LINK = -std=c++11
-LINK_ALL = -std=c++11 $(LINK_SDL2) $(LINK_OPENGL) $(LINK_FREETYPE2)
+LINK_ALL = -std=c++11 $(LINK_SDL2) $(LINK_OPENGL) $(LINK_FREETYPE2) $(LINK_LOCAL_LIBS)
 LINK_SDL2 = -lSDL2 -lSDL2_image -lSDL2_ttf $(LINK_FREETYPE2)
 LINK_OPENGL = -lGL -lGLEW
 LINK_FREETYPE2 = -I/usr/local/include/freetype2 -lfreetype
+LINK_LOCAL_LIBS = -I../lib -L../lib -lfreetype-gl
 
 PTS = ../src/
 
@@ -27,6 +28,9 @@ UTILS_OBJECTS = timer.o fps_counter.o fatal_error.o string_manipulations.o
 
 all: $(ALL_OBJECTS)
 	g++ $(ALL_OBJECTS) $(LINK_ALL) -o executable
+
+freetype-gl:
+	cd ../lib/freetype-gl/build/ && make
 
 
 # MAIN_ITEMS_OBJECTS
@@ -65,8 +69,8 @@ renderer3D.o: $(RENDER3D_SRC)
 
 
 # RESOURCES_OBJECTS
-resource_manager.o: $(PTS)Graphics/resource_manager.cpp
-	g++ $(LINK_ALL) -c $(PTS)Graphics/resource_manager.cpp
+resource_manager.o: $(PTS)resource_manager.cpp
+	g++ $(LINK_ALL) -c $(PTS)resource_manager.cpp
 
 
 # INPUT_OBJECTS

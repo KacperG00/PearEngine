@@ -1,7 +1,9 @@
 #include "resource_manager.h"
 
-#include "../Utilities/string_manipulations.h"
-#include "../string_constants.h"
+#include "Utilities/string_manipulations.h"
+#include "string_constants.h"
+
+#include <freetype-gl/freetype-gl.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 
-#include "Render2D/sprite.h"
+#include "Graphics/Render2D/sprite.h"
 
 namespace pear { namespace graphics {
 	

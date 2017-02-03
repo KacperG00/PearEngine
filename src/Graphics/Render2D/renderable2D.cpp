@@ -1,6 +1,6 @@
 #include "renderable2D.h"
 
-#include "../resource_manager.h"
+#include "../../resource_manager.h"
 
 namespace pear { namespace graphics {
 	

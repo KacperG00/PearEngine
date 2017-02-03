@@ -4,7 +4,7 @@
 #include "Window/window.h"
 #include "Input/input.h"
 
-#include "Graphics/resource_manager.h"
+#include "resource_manager.h"
 
 #include "Graphics/Render2D/static_sprite_renderer.h"
 #include "Graphics/Render2D/sprite_renderer.h"
@@ -13,7 +13,7 @@
 
 class pear_engine
 {
-	static enum class ProgramState { RUNNING, STOPPED } program_state;
+	static enum class ProgramState { RUNNING, STOPPED, MINIMALIZED } program_state;
 	static pear::Window *m_Window;
 	
 	static pear::graphics::StaticSpriteRenderer* m_StaticSpriteRenderer;
