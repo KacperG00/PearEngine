@@ -1,0 +1,10 @@
+#ifndef _PEAR_TRANSFORMATION_TYPES_H_
+#define _PEAR_TRANSFORMATION_TYPES_H_
+
+enum class PearTransformationType { TRANSLATION, ROTATION, SCALE };
+
+#define PEAR_TRANSFORM_TRANSLATE 	PearTransformationType::TRANSLATION
+#define PEAR_TRANSFORM_ROTATE		PearTransformationType::ROTATION
+#define PEAR_TRANSFORM_SCALE		PearTransformationType::SCALE
+
+#endif // _PEAR_TRANSFORMATION_TYPES_H_

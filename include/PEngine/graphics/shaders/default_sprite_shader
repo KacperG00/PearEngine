@@ -1,0 +1,63 @@
+#ifndef PEAR_ENGINE_SHADERS__DEFAULT_SPRITE_SHADER_
+#define PEAR_ENGINE_SHADERS__DEFAULT_SPRITE_SHADER_
+
+#include <string>
+
+namespace pear { namespace graphics { namespace shaders {
+	
+	const std::string DefaultSpriteShader_SRC =
+		"#vertex_shader\n"
+		"#version 130\n"
+		"\n"
+		"in vec3 vsPosition;\n"
+		"in vec4 vsColor;\n"
+		"in float vsTID;\n"
+		"in vec2 vsUV;\n"
+		"\n"
+		"out vec4 fsColor;\n"
+		"out float fsTID;\n"
+		"out vec2 fsUV;\n"
+		"\n"
+		"uniform mat4 transMat;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	gl_Position = transMat * vec4( vsPosition, 1.0f );\n"
+		"	\n"
+		"	fsColor = vsColor;\n"
+		"	fsTID = vsTID;\n"
+		"	fsUV = vsUV;\n"
+		"}\n"
+		"\n"
+		"#fragment_shader\n"
+		"#version 130\n"
+		"\n"
+		"in vec4 fsColor;\n"
+		"in float fsTID;\n"
+		"in vec2 fsUV;\n"
+		"\n"
+		"out vec4 outColor;\n"
+		"\n"
+		"uniform sampler2D diffuse_texture;\n"
+		"uniform vec4 texCoordsModifier;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	vec4 color = vec4( 1.0f, 1.0f, 1.0f, 1.0f );\n"
+		"	if( fsTID == 0.0f )\n"
+		"	{\n"
+		"		color = fsColor;\n"
+		"	}\n"
+		"	else\n"
+		"	{\n"
+		"		color = fsColor * texture( diffuse_texture, vec2(fsUV.x, 1.0f - fsUV.y)\n"
+		"			* vec2(texCoordsModifier.z, texCoordsModifier.w)\n"
+		"			+ vec2(texCoordsModifier.x, texCoordsModifier.y) );\n"
+		"	}\n"
+		"	\n"
+		"	outColor = color;\n"
+		"}\n";
+	
+} } }
+
+#endif // PEAR_ENGINE_SHADERS__DEFAULT_SPRITE_SHADER_
