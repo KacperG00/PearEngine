@@ -5,6 +5,15 @@
 
 namespace pear { 
 	
+	namespace paths_from_bin{
+		
+		const std::string RESOURCES = "../resources/";
+		const std::string TEXTURES = RESOURCES + "Textures/";
+		const std::string FONTS = RESOURCES + "Fonts/";
+		const std::string SHADERS = RESOURCES + "Shaders/";
+
+	}
+
 	namespace paths_from_src {
 		
 		const std::string RESOURCES = "../resources/";

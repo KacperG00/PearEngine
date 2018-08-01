@@ -16,6 +16,9 @@ namespace pear { namespace graphics {
 		this->x = pos.x;
 		this->y = pos.y;
 		
+		if(!(font_resolution < PEAR_FONT_MAX_RESOLUTION))
+			font_resolution = 16;
+		
 		m_Font = ResourceManager::getFont( font );
 		if( m_Font != nullptr )
 		{
@@ -37,9 +40,12 @@ namespace pear { namespace graphics {
 	
 	void Label::setResolution( unsigned int res )
 	{
-		m_FontResolution = res;
-		m_Bitmap = m_Font->getBitmap( res );
-		setText(text.c_str());
+		if(res < PEAR_FONT_MAX_RESOLUTION)
+		{
+			m_FontResolution = res;
+			m_Bitmap = m_Font->getBitmap( res );
+			setText(text.c_str());
+		}
 	}
 	
 	void Label::setText( const char* format, ... )

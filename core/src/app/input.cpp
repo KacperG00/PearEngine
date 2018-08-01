@@ -52,4 +52,10 @@ namespace pear {
 	{
 		return mouse_buttons[num];
 	}
+	
+	void Input::getMousePosition(int& mouse_x, int& mouse_y)
+	{
+		mouse_x = mx;
+		mouse_y = my;
+	}
 }

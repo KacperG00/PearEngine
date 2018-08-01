@@ -30,7 +30,7 @@ namespace pear { namespace graphics {
 		void setText( const char* format, ... );
 		void write( const char* format, ... );
 		
-		// sets color not for currently generated glyphs, but for new ones
+		// sets color not for current glyphs, but for new ones
 		void setTextColor( unsigned char r, unsigned char g, unsigned char b, unsigned char a );
 		
 		void setGlyphsColor( int first, int last,

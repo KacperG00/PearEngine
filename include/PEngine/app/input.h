@@ -23,6 +23,8 @@ namespace pear {
 		static void init();
 		static const bool isKeyPressed( SDL_Scancode key );
 		static const bool isButtonPressed( unsigned int num );
+		
+		static void getMousePosition(int& mouse_x, int& mouse_y);
 	};
 }
 

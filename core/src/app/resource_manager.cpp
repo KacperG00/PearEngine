@@ -107,7 +107,7 @@ namespace pear {
 		
 		SDL_Surface* image = nullptr;
 		
-		image = IMG_Load( std::string( paths_from_build::TEXTURES + filename ).c_str() );
+		image = IMG_Load( std::string( paths_from_bin::TEXTURES + filename ).c_str() );
 		if( image == NULL )
 			utils::printError("Failed to load image %s\n", filename);
 		else

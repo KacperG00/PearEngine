@@ -10,11 +10,13 @@
 namespace pear { namespace graphics {
 	
 #define PEAR_FONT_MAX_GLYPHS 256
-#define PEAR_FONT_MAX_RESOLUTION 128
+#define PEAR_FONT_MAX_RESOLUTION 129
 	
 	struct Glyph
 	{
 		glm::vec4 uv;
+		
+		// should be unique for every bitmap (resolution)
 		unsigned int width;
 		unsigned int height;
 	};

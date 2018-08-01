@@ -59,7 +59,7 @@ namespace pear { namespace graphics {
 		
 		SDL_Color color = { 0xFF, 0xFF, 0xFF, 0xFF };
 		
-		ttf_font = TTF_OpenFont( std::string( paths_from_build::FONTS + name ).c_str(), res );
+		ttf_font = TTF_OpenFont( std::string( paths_from_bin::FONTS + name ).c_str(), res );
 		if( ttf_font == nullptr )
 		{
 			utils::printError( "Failed to load font: %s\n", name );
