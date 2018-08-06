@@ -17,6 +17,12 @@ namespace pear { namespace graphics {
 	Font::Font( const char* filename )
 		: name( filename )
 	{
+		// setting up bitmap array
+		for(unsigned int i = 0; i < PEAR_FONT_MAX_RESOLUTION; ++i)
+		{
+			m_Bitmaps[i].rendered = false;
+		}
+		
 		getBitmap( 16 );
 	}
 	
@@ -29,7 +35,7 @@ namespace pear { namespace graphics {
 		}
 	}
 	
-	Texture* Font::getBitmap( unsigned int font_resolution )
+	Texture* Font::getBitmapT( unsigned int font_resolution )
 	{
 		if( !m_Bitmaps[font_resolution].rendered )
 		{
@@ -45,6 +51,11 @@ namespace pear { namespace graphics {
 		}
 		
 		return m_Bitmaps[font_resolution].bitmap;
+	}
+	
+	Font_Bitmap Font::getBitmap( unsigned int font_resolution )
+	{
+		return m_Bitmaps[font_resolution];
 	}
 	
 	void Font::loadBitmapWithResolution( unsigned int res )
@@ -71,6 +82,8 @@ namespace pear { namespace graphics {
 			// Rendering glyph by glyph in separated SDL_Surfaces from ttf file
 			//
 			int posx = 0;
+			
+			Glyph* glyphs = m_Bitmaps[res].glyphs;
 			
 			for( uint16_t i = 31; i < PEAR_FONT_MAX_GLYPHS; ++i )
 			{
@@ -106,6 +119,8 @@ namespace pear { namespace graphics {
 					bitmap_height = gs[i]->h;
 				}
 			}
+			
+			m_Bitmaps[res].height = bitmap_height;
 			
 			const SDL_PixelFormat& fmt = *(gs[0]->format);
 			bitmap = SDL_CreateRGBSurface( 	0, bitmap_width, bitmap_height,

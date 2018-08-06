@@ -1,0 +1,2 @@
+-> Failed font loading ends with segmentation fault
+-> Weird font sizes ?

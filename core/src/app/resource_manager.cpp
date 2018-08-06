@@ -153,7 +153,7 @@ namespace pear {
 	graphics::Font* ResourceManager::loadFont( const char* filename )
 	{
 		graphics::Font* font = new graphics::Font(filename);
-		if( font->getBitmap(16) == nullptr )
+		if( font->getBitmapT(16) == nullptr )
 		{
 			delete font;
 			font = nullptr;

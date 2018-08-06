@@ -16,31 +16,32 @@ namespace pear { namespace graphics {
 	{
 		glm::vec4 uv;
 		
-		// should be unique for every bitmap (resolution)
 		unsigned int width;
 		unsigned int height;
+	};
+	
+	struct Font_Bitmap
+	{
+		Texture* bitmap;
+		Glyph glyphs[PEAR_FONT_MAX_GLYPHS];
+		unsigned int height;
+		bool rendered;
 	};
 	
 	class Font
 	{
 	public:
 		const char* name;
-		Glyph glyphs[PEAR_FONT_MAX_GLYPHS];
 		
 	private:
-		struct Font_Bitmap
-		{
-			Texture* bitmap;
-			bool rendered;
-		};
-		
 		Font_Bitmap m_Bitmaps[PEAR_FONT_MAX_RESOLUTION];
 		
 	public:
 		Font(const char* filename);
 		~Font();
 		
-		Texture* getBitmap( unsigned int font_resolution );
+		Texture* getBitmapT( unsigned int font_resolution );
+		Font_Bitmap getBitmap( unsigned int font_resolution );
 		
 	private:
 		void loadBitmapWithResolution( unsigned int res );

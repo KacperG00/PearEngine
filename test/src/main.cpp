@@ -27,9 +27,9 @@ int main(int argv, const char* args[])
 	pear::graphics::Label* label4 = new pear::graphics::Label( glm::vec2(-1.0f,  0.1f), "SourceCodePro-Bold.ttf", 16 );
 	pear::graphics::Label* label5 = new pear::graphics::Label( glm::vec2(-1.0f,  0.3f), "SourceCodePro-Bold.ttf", 16 );
 	
-	pear::graphics::Sprite* sprite = new pear::graphics::Sprite( glm::vec4(-1.0f, 1.0f, 2.0f, 2.0f), "void.jpg" );
+	//pear::graphics::Sprite* sprite = new pear::graphics::Sprite( glm::vec4(-1.0f, 1.0f, 2.0f, 2.0f), "void.jpg" );
 	
-	sprite_renderer->submit(sprite);
+	//sprite_renderer->submit(sprite);
 	
 	//for(unsigned int i = 0; i < 100; ++i)
 	//{

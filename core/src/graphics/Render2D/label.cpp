@@ -43,7 +43,7 @@ namespace pear { namespace graphics {
 		if(res < PEAR_FONT_MAX_RESOLUTION)
 		{
 			m_FontResolution = res;
-			m_Bitmap = m_Font->getBitmap( res );
+			m_Bitmap = m_Font->getBitmapT( res );
 			setText(text.c_str());
 		}
 	}
@@ -162,12 +162,14 @@ namespace pear { namespace graphics {
 		int window_width = App::getWindow()->getWidth();
 		int window_height = App::getWindow()->getHeight();
 		
-		float height = (float)m_Font->glyphs[72].height / (float)window_height;
+		float height = (float)(m_Font->getBitmap(m_FontResolution).height) / (float)window_height;
+		
+		Glyph * glyphs = m_Font->getBitmap(m_FontResolution).glyphs;
 		
 		if( unicode > 31 )
 		{
-			float width = (float)m_Font->glyphs[unicode].width / (float)window_width;
-			float height = (float)m_Font->glyphs[unicode].height / (float)window_height;
+			float width = (float)glyphs[unicode].width / (float)window_width;
+			float height = (float)glyphs[unicode].height / (float)window_height;
 			
 			glm::vec4 pos_dim(this->x + advance_x, this->y + advance_y, width, height);
 			
@@ -175,7 +177,7 @@ namespace pear { namespace graphics {
 		
 			Sprite* sprite = new Sprite(pos_dim,
 										m_Bitmap->filename.c_str(),
-										m_Font->glyphs[unicode].uv);
+										glyphs[unicode].uv);
 		
 			return sprite;
 		}
