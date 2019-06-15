@@ -1,31 +1,49 @@
 cmake_minimum_required(VERSION 3.5.2)
 project(PearEngine)
 
-include(FindPkgConfig)
-
-################ LOOKING FOR SDL PACKAGES ########################
-PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
-PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf)
-
-################ LOOKING FOR OPENGL PACKAGES #####################
-find_package(OpenGL)
-find_package(GLEW)
+#option(CrossComp "CrossComp" OFF)
+#
+#if (CrossComp)
+#	SET(CMAKE_SYSTEM_NAME Windows)
+#	
+#	SET(CMAKE_C_COMPILER i486-mingw32-gcc)
+#	SET(CMAKE_CXX_COMPILER i486-mingw32-g++)
+#	SET(CMAKE_RC_COMPILER i486-mingw32-windres)
+#	
+#	SET(CMAKE_FIND_ROOT_PATH /usr/i486-mingw32)
+#	
+#	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+#	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+#	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+#endif()
 
 
 set(EngineCoreName ${PROJECT_NAME}Core)
 set(PearEngine_LIBRARY ${PearEngine_SOURCE_DIR}/lib/lib${EngineCoreName}.a)
-set(PearEngine_NLIBRARIES ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
-string(STRIP "${PearEngine_NLIBRARIES}" PearEngine_NLIBRARIES)
-set(PearEngine_LIBRARIES "${PearEngine_LIBRARY} ${PearEngine_NLIBRARIES}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PearEngine_SOURCE_DIR}/cmake_modules")
 set(LIB_DIR ${PearEngine_SOURCE_DIR}/lib)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 
-include_directories(include)
+
+################ LOOKING FOR LIBRARIES #####################
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+
+set(PearEngine_NLIBRARIES ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARIES})
+string(STRIP "${PearEngine_NLIBRARIES}" PearEngine_NLIBRARIES)
+set(PearEngine_LIBRARIES "${PearEngine_LIBRARY} ${PearEngine_NLIBRARIES}")
+
+include_directories("${PearEngine_SOURCE_DIR}/include"
+					${SDL2_INCLUDE_DIR}
+					${SDL2_IMAGE_INCLUDE_DIR}
+					${SDL2_TTF_INCLUDE_DIR})
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11")
