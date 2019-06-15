@@ -1,18 +1,18 @@
 #include "PEngine/graphics/sprite_renderer.h"
 
+#include "PEngine/app/resource_manager.h"
+
 #include "PEngine/graphics/group.h"
 #include "PEngine/graphics/label.h"
 
 #include "PEngine/utilities/load_text_file.h"
-
-#include <iostream>
 
 namespace pear { namespace graphics {
 	
 	SpriteRenderer::SpriteRenderer()
 		: m_IBO( 0 )
 	{
-		initShaders();
+		m_Shader = nullptr;
 		initIBO();
 	}
 	
@@ -107,60 +107,55 @@ namespace pear { namespace graphics {
 	
 	void SpriteRenderer::flush()
 	{
-		for( int i = 0; i < m_Sprites.size(); ++i )
+		if(m_Shader)
 		{
-			m_Shader.use();
-			
-			if( m_Sprites[i]->texture != nullptr )
+			for( int i = 0; i < m_Sprites.size(); ++i )
 			{
-				m_Shader.setUniform1i( "diffuse_texture", GL_TEXTURE0 );
-				glActiveTexture( GL_TEXTURE0 );
-				glBindTexture( GL_TEXTURE_2D, m_Sprites[i]->texture->textureID );
+				m_Shader->use();
 				
-				if( m_Sprites[i]->renderableType == Renderable2D::RenderableType::SPRITESHEET
-					&& ((SpriteSheet*)m_Sprites[i])->ready() )
+				if( m_Sprites[i]->texture != nullptr )
 				{
-					((SpriteSheet*)m_Sprites[i])->nextFrame();
-					glm::vec4* texMod = ((SpriteSheet*)m_Sprites[i])->getCurrFrame();
-					m_Shader.setUniform4f( "texCoordsModifier", *texMod );
-				}
-				else
-				{
-					m_Shader.setUniform4f( "texCoordsModifier", glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
+					m_Shader->setUniform1i( "diffuse_texture", GL_TEXTURE0 );
+					glActiveTexture( GL_TEXTURE0 );
+					glBindTexture( GL_TEXTURE_2D, m_Sprites[i]->texture->textureID );
+					
+					if( m_Sprites[i]->renderableType == Renderable2D::RenderableType::SPRITESHEET
+						&& ((SpriteSheet*)m_Sprites[i])->ready() )
+					{
+						((SpriteSheet*)m_Sprites[i])->nextFrame();
+						glm::vec4* texMod = ((SpriteSheet*)m_Sprites[i])->getCurrFrame();
+						m_Shader->setUniform4f( "texCoordsModifier", *texMod );
+					}
+					else
+					{
+						m_Shader->setUniform4f( "texCoordsModifier", glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
+					}
 				}
 				
+				glm::mat4 final_matrix = m_Sprites[i]->globalMat * m_Sprites[i]->localMat;
+				m_Shader->setUniformMat4( "transMat", final_matrix );
+				
+				glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_IBO );
+				glBindBuffer( GL_ARRAY_BUFFER, m_Sprites[i]->vbo );
+				
+				glVertexAttribPointer( m_Shader->m_AttributeNum + 0, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, position ) );
+				glVertexAttribPointer( m_Shader->m_AttributeNum + 1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, color ) );
+				glVertexAttribPointer( m_Shader->m_AttributeNum + 2, 1, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, tid ) );
+				glVertexAttribPointer( m_Shader->m_AttributeNum + 3, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, uv ) );
+				
+				glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
+				
+				glBindBuffer( GL_ARRAY_BUFFER, 0 );
+				glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+				
+				m_Shader->unuse();
 			}
-			
-			glm::mat4 final_matrix = m_Sprites[i]->globalMat * m_Sprites[i]->localMat;
-			m_Shader.setUniformMat4( "transMat", final_matrix );
-			
-			glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_IBO );
-			glBindBuffer( GL_ARRAY_BUFFER, m_Sprites[i]->vbo );
-			
-			glVertexAttribPointer( m_AttributeNum + 0, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, position ) );
-			glVertexAttribPointer( m_AttributeNum + 1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, color ) );
-			glVertexAttribPointer( m_AttributeNum + 2, 1, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, tid ) );
-			glVertexAttribPointer( m_AttributeNum + 3, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (GLvoid*)offsetof( Vertex, uv ) );
-			
-			glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
-			
-			glBindBuffer( GL_ARRAY_BUFFER, 0 );
-			glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-			
-			m_Shader.unuse();
 		}
 	}
 	
-	void SpriteRenderer::initShaders()
+	void SpriteRenderer::bindShader(const char* shaderName)
 	{
-		m_AttributeNum = Shader::numAttributes;
-		
-		m_Shader.compileShaders( shaders::DefaultSpriteShader_SRC.c_str() );
-		m_Shader.addAttribute( "vsPosition" );
-		m_Shader.addAttribute( "vsColor" );
-		m_Shader.addAttribute( "vsTID" );
-		m_Shader.addAttribute( "vsUV" );
-		m_Shader.linkShaders();
+		m_Shader = ResourceManager::getShader( shaderName );
 	}
 	
 	void SpriteRenderer::initIBO()

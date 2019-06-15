@@ -90,6 +90,11 @@ namespace pear { namespace graphics {
 		}
 	}
 	
+	void StaticSpriteRenderer::bindShader(const char* shaderName)
+	{
+		
+	}
+	
 	void StaticSpriteRenderer::sortSpritesByTextureID()
 	{
 		if( m_Sprites.size() > 1 )

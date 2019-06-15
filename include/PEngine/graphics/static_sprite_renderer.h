@@ -41,6 +41,7 @@ namespace pear { namespace graphics {
 		void submit( Renderable2D* renderable ) override;
 		void erase( Renderable2D* renderable ) override;
 		void flush() override;
+		void bindShader(const char* shaderName) override;
 		void sortSpritesByTextureID();
 		
 	private:

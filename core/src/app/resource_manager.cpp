@@ -4,6 +4,7 @@
 
 #include "PEngine/utilities/string_manipulations.h"
 #include "PEngine/utilities/error.h"
+#include "PEngine/utilities/load_text_file.h"
 #include "PEngine/string_constants.h"
 
 #include <SDL.h>
@@ -19,6 +20,10 @@ namespace pear {
 	// RENDERABLES DATA //
 	std::map <unsigned long int, graphics::Renderable2D*> ResourceManager::m_Renderables2D;
 	unsigned long int ResourceManager::m_RenderableCount = 0;
+	
+	// SHADERS //
+	std::map <const char*, graphics::Shader*> ResourceManager::m_Shaders;
+	unsigned int ResourceManager::m_ShaderCount = 0;
 	
 	// TEXTURES DATA //
 	std::map <std::string, graphics::Texture*> ResourceManager::m_Textures;
@@ -62,6 +67,26 @@ namespace pear {
 		m_RenderableCount++;
 		renderable->id = m_RenderableCount;
 		m_Renderables2D.insert( std::pair<unsigned long int, graphics::Renderable2D*>( m_RenderableCount, renderable ) );
+	}
+	
+	void ResourceManager::addShader( const char* name )
+	{
+		graphics::Shader * shader = new graphics::Shader;
+		
+		std::string path = paths_from_bin::SHADERS + name;
+		std::string source = utils::loadTextFile( path.c_str() );
+		
+		shader->compileShaders( source.c_str() );
+		
+		shader->m_AttributeNum = graphics::Shader::numAttributes;
+		shader->addAttribute( "vsPosition" );
+		shader->addAttribute( "vsColor" );
+		shader->addAttribute( "vsTID" );
+		shader->addAttribute( "vsUV" );
+		
+		shader->linkShaders();
+		
+		m_Shaders.insert( std::pair<const char*, graphics::Shader*>( name, shader ) );
 	}
 	
 	void ResourceManager::deleteTexture( const char* filename )
@@ -181,6 +206,14 @@ namespace pear {
 			return m_Fonts[font_name];
 	}
 	
+	graphics::Shader* ResourceManager::getShader( const char* name )
+	{
+		if( m_Shaders.count(name) == 0 )
+			return nullptr;
+		else
+			return m_Shaders[name];
+	}
+	
 	graphics::Renderable2D* ResourceManager::getRenderable2D( unsigned int id )
 	{
 		if( m_Renderables2D.count(id) == 0 )
@@ -261,6 +294,24 @@ namespace pear {
 			m_Fonts.clear();
 			
 			if(m_Fonts.empty())
+				std::cerr << "Success\n";
+			else
+				std::cerr << "Failed\n";
+		}
+	}
+	
+	void ResourceManager::cleanShaderMap()
+	{
+		if( !(m_Shaders.empty()) )
+		{
+			std::cerr << "Releasing shader data...";
+			
+			for( auto i : m_Shaders )
+				delete i.second;
+			
+			m_Shaders.clear();
+			
+			if(m_Shaders.empty())
 				std::cerr << "Success\n";
 			else
 				std::cerr << "Failed\n";

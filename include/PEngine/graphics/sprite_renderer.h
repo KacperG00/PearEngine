@@ -21,8 +21,6 @@ namespace pear { namespace graphics {
 		
 	private:
 		std::vector<Renderable2D*> m_Sprites;
-		Shader m_Shader;
-		unsigned int m_AttributeNum;
 		
 		GLuint m_IBO;
 		
@@ -32,9 +30,9 @@ namespace pear { namespace graphics {
 		void submit( Renderable2D* renderable ) override;
 		void erase( Renderable2D* renderable ) override;
 		void flush() override;
-				
+		void bindShader(const char* shaderName) override;
+		
 	private:
-		void initShaders();
 		void initIBO();
 		Sprite* loadSprite( Renderable2D* renderable );
 		SpriteSheet* loadSpriteSheet( Renderable2D* renderable );

@@ -14,7 +14,7 @@ namespace pear { namespace graphics {
 	unsigned int Shader::numAttributes = 0;
 	
 	Shader::Shader()
-		: m_Program( 0 )
+		: m_Program( 0 ), m_AttributeNum( 0 )
 	{
 	}
 

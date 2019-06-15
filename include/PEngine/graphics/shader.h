@@ -21,7 +21,11 @@ namespace pear { namespace graphics {
 		GLuint m_FragmentShaderID;
 		
 	public:
+		//next attribute number to assign
 		static unsigned int numAttributes;
+		
+		// number of the first attribute in a shader
+		unsigned int m_AttributeNum;
 		
 	private:
 		void compileShader( GLuint shader, const char* filePath );

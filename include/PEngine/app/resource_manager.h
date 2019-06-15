@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 
+#include "PEngine/graphics/shader.h"
 #include "PEngine/graphics/font.h"
 #include "PEngine/graphics/sprite.h"
 
@@ -18,6 +19,9 @@ namespace pear {
 		// Keys are Renderable2D::id
 		static std::map <unsigned long int, graphics::Renderable2D*> m_Renderables2D;
 		static unsigned long int m_RenderableCount;
+		
+		static std::map <const char*, graphics::Shader*> m_Shaders;
+		static unsigned int m_ShaderCount;
 		
 		// Keys are Texture::filename
 		static std::map <std::string, graphics::Texture*> m_Textures;
@@ -34,6 +38,7 @@ namespace pear {
 		static void addTexture( const char* name, graphics::Texture* texture );
 		static void addFont( const char* filename );
 		static void addRenderable2D( graphics::Renderable2D* renderable );
+		static void addShader( const char* name );
 		
 		static void deleteTexture( const char* filename );
 		static void deleteFont( const char* filename );
@@ -41,6 +46,7 @@ namespace pear {
 		
 		static graphics::Texture* getTexture( const char* texture_name );
 		static graphics::Font* getFont( const char* font_name );
+		static graphics::Shader* getShader( const char* name );
 		
 		static graphics::Renderable2D* getRenderable2D( unsigned int id );
 		static graphics::Sprite* getSprite( unsigned int id );
@@ -49,6 +55,7 @@ namespace pear {
 		inline static unsigned int getFontCount() { return m_FontCount; }
 		inline static unsigned int getRenderable2DCount() { return m_RenderableCount; }
 		inline static unsigned int getSpriteCount() { return graphics::Sprite::sprite_count; }
+		inline static unsigned int getShaderCount() { return m_ShaderCount; }
 		
 		static void printRenderableInfo();
 		
@@ -60,6 +67,7 @@ namespace pear {
 		static void cleanRenderables2DMap();
 		static void cleanTextureMap();
 		static void cleanFontMap();
+		static void cleanShaderMap();
 	};
 	
 }
