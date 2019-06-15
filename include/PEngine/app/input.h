@@ -1,7 +1,7 @@
 #ifndef PEAR_INPUT_H
 #define PEAR_INPUT_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace pear {
 	

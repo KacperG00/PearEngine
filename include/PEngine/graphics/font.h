@@ -3,7 +3,7 @@
 
 #include "PEngine/graphics/renderable2D.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <vector>
 

@@ -5,9 +5,9 @@
 #include "PEngine/graphics/group.h"
 #include "PEngine/graphics/label.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 

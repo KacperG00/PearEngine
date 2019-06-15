@@ -1,7 +1,7 @@
 #ifndef PEAR_WINDOW_H
 #define PEAR_WINDOW_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <GL/glew.h>
 
 namespace pear {

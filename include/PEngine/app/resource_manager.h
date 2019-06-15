@@ -1,7 +1,7 @@
 #ifndef _PEAR_RESOURCE_MANAGER_H_
 #define _PEAR_RESOURCE_MANAGER_H_
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 

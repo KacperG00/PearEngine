@@ -1,6 +1,6 @@
 #include "PEngine/utilities/timer.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace pear { namespace utils {
 	
